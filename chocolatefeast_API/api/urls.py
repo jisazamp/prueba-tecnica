@@ -2,6 +2,7 @@ from django.urls import path
 from .views import ClientView
 from .views import StoreView
 from .views import OrderView
+from .views import PromotionView
 
 urlpatterns = [
     path("clients/", ClientView.as_view(), name="clients_list"),
@@ -10,4 +11,6 @@ urlpatterns = [
     path("stores/<int:id>", StoreView.as_view(), name="stores_process"),
     path("orders/", OrderView.as_view(), name="orders_list"),
     path("orders/<int:id>", OrderView.as_view(), name="orders_process"),
+    path("promotions/", PromotionView.as_view(), name="promotions_list"),
+    path("promotions/<int:id>", PromotionView.as_view(), name="promotions_process"),
 ]

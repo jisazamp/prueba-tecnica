@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Client
 from .models import Store
 from .models import Order
+from .models import Promotion
 import json
 
 # Create your views here.
@@ -133,3 +134,49 @@ class OrderView(View):
             else:
                 data = {"message": "order not found..."}
             return JsonResponse(data)
+
+    def post(self, request):
+        jd = json.loads(request.body)
+        c = Order.objects.create(
+            quantity=jd["quantity"],
+            client=jd["client"],
+            store=jd["store"],
+            products=jd["products"],
+        )
+        data = {"message": "Sucess", "id": c.id}
+        return JsonResponse(data)
+
+
+class PromotionView(View):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request, id=0):
+        if id > 0:
+            promotions = list(Promotion.objects.filter(id=id).values())
+            if len(promotions) > 0:
+                promotion = promotions[0]
+                data = {"message": "Success", "Promotion": promotion}
+            else:
+                data = {"message": "promotion not found..."}
+            return JsonResponse(data)
+        else:
+            promotions = list(Promotion.objects.values())
+            if len(promotions) > 0:
+                data = {"message": "Success", "Promotions": promotions}
+            else:
+                data = {"message": "promotion not found..."}
+            return JsonResponse(data)
+
+    def put(self, request, id):
+        jd = json.loads(request.body)
+        promotions = list(Promotion.objects.filter(id=id).values())
+        if len(promotions) > 0:
+            promotion = Promotion.objects.get(id=id)
+            promotion.wraps = jd["wraps"]
+            promotion.save()
+            data = {"message": "Sucess"}
+        else:
+            data = {"message": "Promotion not found..."}
+        return JsonResponse(data)
