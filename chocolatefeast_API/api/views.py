@@ -30,8 +30,8 @@ class ClientView(View):
 
     def post(self, request):
         jd = json.loads(request.body)
-        Client.objects.create(name=jd["name"])
-        data = {"message": "Sucess"}
+        c = Client.objects.create(name=jd["name"], budget=jd["budget"])
+        data = {"message": "Sucess", "id": c.id}
         return JsonResponse(data)
 
     def put(self, request, id):
