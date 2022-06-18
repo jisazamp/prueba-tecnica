@@ -101,15 +101,6 @@ class OrderView(View):
                 orderProducts = list(orderQuery.products.all())
                 orderProductsPromotions = list(orderProducts[0].promotions.all())
 
-                # print(
-                #     "n",
-                #     orderClient.budget,
-                #     "c",
-                #     orderProducts[0].price,
-                #     "m",
-                #     orderProductsPromotions[0].wraps,
-                # )
-
                 def chocolateFeast(n, c, m):
                     choco = n // c
                     wraps = choco
@@ -126,7 +117,12 @@ class OrderView(View):
                     orderProductsPromotions[0].wraps,
                 )
 
-                data = {"message": "Success", "order": order, "chocolatefeast": result}
+                data = {
+                    "message": "Success",
+                    "order": order,
+                    "chocolatefeast": result,
+                    "clientName": orderClient.name,
+                }
             else:
                 data = {"message": "order not found..."}
             return JsonResponse(data)
